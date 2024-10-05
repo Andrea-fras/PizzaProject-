@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General styling for sections */
+        .menu-section {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .menu-column {
+            width: 30%;
+        }
+
+        .pizza-selection {
+            width: 60%;
+            text-align: center;
+        }
+
+        .item-list {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .item-list h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Menu</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="order.html">Order</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Our Pizza Selection</h2>
+        <div class="menu-section">
+            <div class="menu-column">
+                <h2>Drinks</h2>
+                <div id="drink-list"></div>
+            </div>
+            <div class="pizza-selection">
+                <div id="pizza-list"></div>
+            </div>
+            <div class="menu-column">
+                <h2>Desserts</h2>
+                <div id="dessert-list"></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Fetch pizzas from the server
+        fetch('/pizzas')
+            .then(response => response.json())
+            .then(data => {
+                const pizzaList = document.getElementById('pizza-list');
+                data.forEach(pizza => {
+                    let price = parseFloat(pizza.price);
+                    if (isNaN(price)) {
+                        price = 0;
+                    }
+
+                    const pizzaItem = document.createElement('div');
+                    pizzaItem.className = 'item-list';
+                    pizzaItem.innerHTML = `
+                        <h3>${pizza.name}</h3>
+                        <p>Price: $${price.toFixed(2)}</p>
+                        <div class="ingredient-overlay">Ingredients: ${pizza.ingredients}</div>
+                    `;
+                    pizzaList.appendChild(pizzaItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching pizzas:', error);
+                const pizzaList = document.getElementById('pizza-list');
+                pizzaList.innerHTML = '<p>Failed to load pizza menu. Please try again later.</p>';
+            });
+
+        // Fetch drinks from the server
+fetch('/drinks')
+    .then(response => response.json())
+    .then(data => {
+        const drinkList = document.getElementById('drink-list');
+        data.forEach(drink => {
+            let price = parseFloat(drink.price); // Convert price to a number
+            if (isNaN(price)) {
+                price = 0;
+            }
+
+            const drinkItem = document.createElement('div');
+            drinkItem.className = 'item-list';
+            drinkItem.innerHTML = `
+                <h3>${drink.name}</h3>
+                <p>Price: $${price.toFixed(2)}</p>
+            `;
+            drinkList.appendChild(drinkItem);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching drinks:', error);
+        const drinkList = document.getElementById('drink-list');
+        drinkList.innerHTML = '<p>Failed to load drinks menu. Please try again later.</p>';
+    });
+
+// Fetch desserts from the server
+fetch('/desserts')
+    .then(response => response.json())
+    .then(data => {
+        const dessertList = document.getElementById('dessert-list');
+        data.forEach(dessert => {
+            let price = parseFloat(dessert.price); // Convert price to a number
+            if (isNaN(price)) {
+                price = 0;
+            }
+
+            const dessertItem = document.createElement('div');
+            dessertItem.className = 'item-list';
+            dessertItem.innerHTML = `
+                <h3>${dessert.name}</h3>
+                <p>Price: $${price.toFixed(2)}</p>
+            `;
+            dessertList.appendChild(dessertItem);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching desserts:', error);
+        const dessertList = document.getElementById('dessert-list');
+        dessertList.innerHTML = '<p>Failed to load desserts menu. Please try again later.</p>';
+    });
+
+    </script>
+</body>
+</html>
